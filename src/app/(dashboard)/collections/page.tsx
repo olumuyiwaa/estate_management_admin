@@ -128,7 +128,7 @@ export default function CollectionsPage() {
       </div>
 
       <div className="flex gap-2 border-b border-gray-200 dark:border-gray-700">
-        {(["outstanding", "overdue", "paid", "all"] as const).map((t) => (
+        {(["all","outstanding", "overdue", "paid"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
