@@ -33,6 +33,11 @@ export default function UsersPage() {
   const [search, setSearch] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showCreateRole, setShowCreateRole] = useState(false);
+  const [roleForm, setRoleForm] = useState({ roleName: "", description: "" });
+  const [assignUser, setAssignUser] = useState<AppUser | null>(null);
+  const [assignRoles, setAssignRoles] = useState<string[]>([]);
+  const [roleSaving, setRoleSaving] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -147,6 +152,46 @@ export default function UsersPage() {
     }
   };
 
+
+  const handleCreateRole = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRoleSaving(true);
+    try {
+      await api.post("/api/Roles/role/create-role", {
+        roleName: roleForm.roleName,
+        description: roleForm.description || roleForm.roleName,
+      });
+      toast.success("Role created");
+      setShowCreateRole(false);
+      setRoleForm({ roleName: "", description: "" });
+      fetchRoles();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to create role");
+    } finally {
+      setRoleSaving(false);
+    }
+  };
+
+  const handleAssignRoles = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!assignUser?.userName) return;
+    setRoleSaving(true);
+    try {
+      await api.post("/api/Access/AddUserToRoles", {
+        userName: assignUser.userName,
+        roles: assignRoles,
+      });
+      toast.success("Roles updated");
+      setAssignUser(null);
+      setAssignRoles([]);
+      fetchUsers(search.trim() || undefined);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to assign roles");
+    } finally {
+      setRoleSaving(false);
+    }
+  };
+
   const toggleRole = (roleName: string) => {
     setForm((prev) => ({
       ...prev,
@@ -167,12 +212,20 @@ export default function UsersPage() {
             Manage portal users and role assignments
           </p>
         </div>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="inline-flex items-center px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium rounded-lg"
-        >
-          + Create User
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setShowCreateRole(true)}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium rounded-lg"
+          >
+            + Create Role
+          </button>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="inline-flex items-center px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium rounded-lg"
+          >
+            + Create User
+          </button>
+        </div>
       </div>
 
       {/* Roles chips */}
@@ -376,6 +429,15 @@ export default function UsersPage() {
                         </button>
                       )}
                       <button
+                        onClick={() => {
+                          setAssignUser(u);
+                          setAssignRoles([...(u.roles || [])]);
+                        }}
+                        className="text-sm text-purple-600 font-medium"
+                      >
+                        Roles
+                      </button>
+                      <button
                         onClick={() => handleResetPassword(u.userName!)}
                         className="text-sm text-brand-600 font-medium"
                       >
@@ -389,6 +451,79 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
+
+      {showCreateRole && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold mb-4">Create Role</h2>
+            <form onSubmit={handleCreateRole} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Role name *</label>
+                <input
+                  required
+                  value={roleForm.roleName}
+                  onChange={(e) => setRoleForm({ ...roleForm, roleName: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                  placeholder="e.g. SecurityOfficer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <input
+                  value={roleForm.description}
+                  onChange={(e) => setRoleForm({ ...roleForm, description: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setShowCreateRole(false)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">Cancel</button>
+                <button type="submit" disabled={roleSaving} className="flex-1 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm disabled:opacity-60">{roleSaving ? "Saving…" : "Create"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {assignUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold mb-1">Assign roles</h2>
+            <p className="text-sm text-gray-500 mb-4">{assignUser.userName}</p>
+            <form onSubmit={handleAssignRoles} className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {roles.map((r) => (
+                  <label
+                    key={r.id}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border cursor-pointer ${
+                      assignRoles.includes(r.name)
+                        ? "bg-brand-50 border-brand-500 text-brand-700"
+                        : "border-gray-300 text-gray-600"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={assignRoles.includes(r.name)}
+                      onChange={() =>
+                        setAssignRoles((prev) =>
+                          prev.includes(r.name)
+                            ? prev.filter((x) => x !== r.name)
+                            : [...prev, r.name]
+                        )
+                      }
+                    />
+                    {r.name}
+                  </label>
+                ))}
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setAssignUser(null)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">Cancel</button>
+                <button type="submit" disabled={roleSaving} className="flex-1 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm disabled:opacity-60">{roleSaving ? "Saving…" : "Save roles"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

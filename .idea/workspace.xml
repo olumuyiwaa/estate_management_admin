@@ -1,52 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="134df1e9-da6e-4a9e-893b-71d216f16f3d" name="Changes" comment="" />
+    <list default="true" id="c2cbba40-f738-47ff-8828-e0939412018a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/estate-admin-crud-ui.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/(dashboard)/collections-config/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/endpoints.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/ConfirmDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/DataTable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/EmptyState.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/PageHeader.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/StatCard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/StatusBadge.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/app-build-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/build-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/.previewinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/.rscinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/.tsbuildinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/chrome-devtools-workspace-uuid" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/next-devtools-config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/0.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/1.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/10.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/11.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/2.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/3.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/4.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/5.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/6.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/7.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/8.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/9.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/index.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-development/index.pack.gz.old" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/0.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/1.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/2.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/3.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/4.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/index.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/client-production/index.pack.old" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/edge-server-production/0.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/edge-server-production/index.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/0.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/1.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/10.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/2.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/3.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/4.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/5.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/6.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/7.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/8.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/9.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/index.pack.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-development/index.pack.gz.old" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-production/0.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-production/1.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-production/2.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-production/index.pack" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/cache/webpack/server-production/index.pack.old" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/prerender-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/react-loadable-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/routes-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/app-paths-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/app/(full-width-pages)/(auth)/page.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/app/(full-width-pages)/(auth)/page_client-reference-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/interception-route-rewrite-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/middleware-build-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/middleware-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/middleware-react-loadable-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/next-font-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/next-font-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/pages-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/server-reference-manifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/server-reference-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/@swc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/agent-base.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/asynckit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/axios.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/call-bind-apply-helpers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/clsx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/combined-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/debug.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/delayed-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/dunder-proto.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/es-define-property.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/es-errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/es-object-atoms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/es-set-tostringtag.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/follow-redirects.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/form-data.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/function-bind.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/get-intrinsic.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/get-proto.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/gopd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/has-flag.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/has-symbols.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/has-tostringtag.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/hasown.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/https-proxy-agent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/math-intrinsics.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/mime-db.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/mime-types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/ms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/next.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/proxy-from-env.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/react-toastify.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/vendor-chunks/supports-color.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/server/webpack-runtime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/app-pages-internals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/app/(full-width-pages)/(auth)/layout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/app/(full-width-pages)/(auth)/page.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/app/layout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/app/not-found.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/main-app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/polyfills.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/chunks/webpack.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/css/app/layout.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/development/_buildManifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/development/_ssgManifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/webpack/633457081244afec._.hot-update.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/webpack/9c13a99201113985.webpack.hot-update.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/webpack/app/layout.9c13a99201113985.hot-update.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/static/webpack/webpack.9c13a99201113985.hot-update.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/trace" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/app/(full-width-pages)/(auth)/layout.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/app/(full-width-pages)/(auth)/page.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/app/layout.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/cache-life.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/routes.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.next/types/validator.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/residents/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/residents/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/service-requests/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/service-requests/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/staff/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/staff/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/users/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/users/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Modal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Modal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
-}</component>
-  <component name="ProjectId" id="3J2FizdXpWN6ujuWw9BXXzXLAsw" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "olumuyiwaa"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/olumuyiwaa/estate_management_admin.git",
+    "accountId": "bfbeee3a-ed46-48c5-bda9-001fea183c17"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="3JEdvLANsM8DT6drvgy3JE28FBk" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
-    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/emmanuel.oladoyin/StudioProjects/corvanta-estate-admin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/emmanuel.oladoyin/StudioProjects/corvanta-estate-admin/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cidr.known.project.marker": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "js.debugger.nextJs.config.created.client": "true",
+    "js.debugger.nextJs.config.created.server": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/emmanuel.oladoyin/StudioProjects/estate-admin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "show.migrate.to.gradle.popup": "false",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="npm.Next.js: server-side">
+    <configuration default="true" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" IS_LOCATION_SIMULATION_SUPPORTED="false" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+      <embedded_app_extension_list />
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
     </configuration>
@@ -71,12 +230,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="134df1e9-da6e-4a9e-893b-71d216f16f3d" name="Changes" comment="" />
-      <created>1788851388838</created>
+      <changelist id="c2cbba40-f738-47ff-8828-e0939412018a" name="Changes" comment="" />
+      <created>1789230394131</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1788851388838</updated>
-      <workItem from="1788851391334" duration="2326000" />
+      <updated>1789230394131</updated>
+      <workItem from="1789230395995" duration="248000" />
     </task>
     <servers />
   </component>

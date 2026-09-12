@@ -92,6 +92,47 @@ export default function ServiceRequestsPage() {
     }
   };
 
+  const handleAssign = async (id: number) => {
+    const assignedTo =
+      typeof window !== "undefined"
+        ? window.prompt("Assign to (staff name or user code):")
+        : null;
+    if (!assignedTo?.trim()) return;
+    try {
+      await api.post("/api/ServiceRequests/AssignServiceRequest", {
+        id,
+        assignedTo: assignedTo.trim(),
+        comments: "Assigned via admin portal",
+      });
+      toast.success("Request assigned");
+      fetchRequests();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Assign failed");
+    }
+  };
+
+  const handleClose = async (id: number) => {
+    if (typeof window !== "undefined" && !window.confirm("Close this request?"))
+      return;
+    try {
+      await api.post("/api/ServiceRequests/CloseServiceRequest", { id });
+      toast.success("Request closed");
+      fetchRequests();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Close failed");
+    }
+  };
+
+  const handleReopen = async (id: number) => {
+    try {
+      await api.post("/api/ServiceRequests/ReopenServiceRequest", { id });
+      toast.success("Request reopened");
+      fetchRequests();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Reopen failed");
+    }
+  };
+
   const priorityColor = (p?: string) => {
     switch (p?.toLowerCase()) {
       case "critical":
@@ -323,18 +364,51 @@ export default function ServiceRequestsPage() {
                         : "—"}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {r.status?.toLowerCase() !== "resolved" &&
-                        r.status?.toLowerCase() !== "closed" && (
+                      <div className="flex flex-wrap justify-end gap-2">
+                        <button
+                          onClick={() => setViewRequest(r)}
+                          className="text-sm text-gray-600 font-medium"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => setEditRequest(r)}
+                          className="text-sm text-brand-600 font-medium"
+                        >
+                          Edit
+                        </button>
+                        {r.status?.toLowerCase() !== "resolved" &&
+                          r.status?.toLowerCase() !== "closed" && (
+                            <>
+                              <button
+                                onClick={() => handleAssign(r.id)}
+                                className="text-sm text-purple-600 font-medium"
+                              >
+                                Assign
+                              </button>
+                              <button
+                                onClick={() => handleResolve(r.id)}
+                                className="text-sm text-emerald-600 font-medium"
+                              >
+                                Resolve
+                              </button>
+                              <button
+                                onClick={() => handleClose(r.id)}
+                                className="text-sm text-gray-500 font-medium"
+                              >
+                                Close
+                              </button>
+                            </>
+                          )}
+                        {(r.status?.toLowerCase() === "resolved" ||
+                          r.status?.toLowerCase() === "closed") && (
                           <button
-                            onClick={() => handleResolve(r.id)}
-                            className="text-sm text-brand-600 hover:text-brand-700 font-medium"
+                            onClick={() => handleReopen(r.id)}
+                            className="text-sm text-orange-600 font-medium"
                           >
-                            Resolve
+                            Reopen
                           </button>
                         )}
-                      <div className="flex justify-end gap-2">
-                        <button onClick={() => setViewRequest(r)} className="text-sm text-gray-600">View</button>
-                        <button onClick={() => setEditRequest(r)} className="text-sm text-brand-600">Edit</button>
                       </div>
                     </td>
                   </tr>

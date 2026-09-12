@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { name: "Vehicle Access", path: "/vehicles", icon: "🚗" },
   { name: "Service Requests", path: "/service-requests", icon: "🛠️" },
   { name: "Collections", path: "/collections", icon: "💰" },
+  { name: "Collection Types", path: "/collections-config", icon: "📋" },
   { name: "Announcements", path: "/announcements", icon: "📢" },
   { name: "Issues", path: "/issues", icon: "⚠️" },
   { name: "Marketplace", path: "/marketplace", icon: "🛒" },

@@ -26,6 +26,7 @@ export default function ResidentsPage() {
     residentType: "Owner",
     title: "Mr",
     sex: "Male",
+    withUserAccount: true,
   });
   const [saving, setSaving] = useState(false);
   const [viewResident, setViewResident] = useState<Resident | null>(null);
@@ -73,8 +74,24 @@ export default function ResidentsPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/api/Residents/CreateResident", form);
-      toast.success("Resident created successfully");
+      if (form.withUserAccount) {
+        await api.post("/api/Residents/CreateResidentWithUserAcct", {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email || null,
+          mobileNo: form.mobileNo,
+          address: form.address || null,
+          residentType: form.residentType,
+          title: form.title,
+          sex: form.sex,
+          roles: ["Resident"],
+        });
+        toast.success("Resident created with user account");
+      } else {
+        const { withUserAccount, ...payload } = form;
+        await api.post("/api/Residents/CreateResident", payload);
+        toast.success("Resident created successfully");
+      }
       setShowForm(false);
       setForm({
         firstName: "",
@@ -85,8 +102,9 @@ export default function ResidentsPage() {
         residentType: "Owner",
         title: "Mr",
         sex: "Male",
+        withUserAccount: true,
       });
-      fetchResidents();
+      fetchResidents(search.trim() || undefined, page);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to create resident");
     } finally {
