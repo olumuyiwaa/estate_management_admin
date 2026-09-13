@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/app/api/axios";
 import { toast } from "react-toastify";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface AppUser {
   id: string;
@@ -412,37 +413,34 @@ export default function UsersPage() {
                         {u.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      {u.isActive ? (
-                        <button
-                          onClick={() => handleDeactivate(u.userName!)}
-                          className="text-sm text-orange-600 font-medium"
-                        >
-                          Deactivate
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleReActivate(u.userName!)}
-                          className="text-sm text-green-600 font-medium"
-                        >
-                          Reactivate
-                        </button>
-                      )}
-                      <button
-                        onClick={() => {
-                          setAssignUser(u);
-                          setAssignRoles([...(u.roles || [])]);
-                        }}
-                        className="text-sm text-purple-600 font-medium"
-                      >
-                        Roles
-                      </button>
-                      <button
-                        onClick={() => handleResetPassword(u.userName!)}
-                        className="text-sm text-brand-600 font-medium"
-                      >
-                        Reset PW
-                      </button>
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Deactivate",
+                            onClick: () => handleDeactivate(u.userName!),
+                            variant: "warning",
+                            hidden: !u.isActive,
+                          },
+                          {
+                            label: "Reactivate",
+                            onClick: () => handleReActivate(u.userName!),
+                            variant: "success",
+                            hidden: !!u.isActive,
+                          },
+                          {
+                            label: "Roles",
+                            onClick: () => {
+                              setAssignUser(u);
+                              setAssignRoles([...(u.roles || [])]);
+                            },
+                          },
+                          {
+                            label: "Reset password",
+                            onClick: () => handleResetPassword(u.userName!),
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

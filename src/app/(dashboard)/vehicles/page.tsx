@@ -5,6 +5,7 @@ import api from "@/app/api/axios";
 import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 import UpdateModal from "@/components/common/UpdateModal";
 
 interface ResidentVehicle {
@@ -316,19 +317,18 @@ export default function VehiclesPage() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-right">
-                          <div className="flex justify-end gap-3">
-                            {v.plateNumber && (
-                              <button
-                                onClick={() => handleVerify(v.plateNumber!)}
-                                className="text-sm text-brand-600 font-medium"
-                              >
-                                Verify
-                              </button>
-                            )}
-                            <button onClick={() => setViewVehicle(v)} className="text-sm text-gray-600">View</button>
-                            <button onClick={() => setEditVehicle(v)} className="text-sm text-brand-600">Edit</button>
-                          </div>
-                      </td>
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Verify",
+                            onClick: () => handleVerify(v.plateNumber!),
+                            hidden: !v.plateNumber,
+                          },
+                          { label: "View", onClick: () => setViewVehicle(v) },
+                          { label: "Edit", onClick: () => setEditVehicle(v) },
+                        ]}
+                      />
+                    </td>
                     </tr>
                   ))
                 )}

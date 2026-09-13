@@ -6,6 +6,7 @@ import { API } from "@/app/api/endpoints";
 import { extractList, errMsg } from "@/app/api/helpers";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/common/PageHeader";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface NotificationItem {
   id?: number | string;
@@ -237,11 +238,15 @@ export default function NotificationsPage() {
                         : "—"}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {n.id != null && (
-                        <button onClick={() => markRead(n.id!)} className="text-sm text-brand-600 font-medium">
-                          Mark read
-                        </button>
-                      )}
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Mark read",
+                            onClick: () => markRead(n.id!),
+                            hidden: n.id == null,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

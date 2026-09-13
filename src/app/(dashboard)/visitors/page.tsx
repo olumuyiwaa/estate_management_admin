@@ -5,6 +5,7 @@ import api from "@/app/api/axios";
 import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface Visitor {
   id: number;
@@ -304,25 +305,25 @@ export default function VisitorsPage() {
                         {v.status || "—"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2">
-                      {v.status?.toLowerCase() === "pending" && (
-                        <button
-                          onClick={() => handleCheckIn(v)}
-                          className="text-sm text-green-600 font-medium"
-                        >
-                          Check In
-                        </button>
-                      )}
-                      {["checkedin", "checked-in", "active"].includes(
-                        (v.status || "").toLowerCase()
-                      ) && (
-                        <button
-                          onClick={() => handleCheckOut(v)}
-                          className="text-sm text-red-600 font-medium"
-                        >
-                          Check Out
-                        </button>
-                      )}
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Check In",
+                            onClick: () => handleCheckIn(v),
+                            variant: "success",
+                            hidden: v.status?.toLowerCase() !== "pending",
+                          },
+                          {
+                            label: "Check Out",
+                            onClick: () => handleCheckOut(v),
+                            variant: "danger",
+                            hidden: !["checkedin", "checked-in", "active"].includes(
+                              (v.status || "").toLowerCase()
+                            ),
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

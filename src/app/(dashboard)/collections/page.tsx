@@ -5,6 +5,7 @@ import api from "@/app/api/axios";
 import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface Collection {
   id: number;
@@ -246,17 +247,18 @@ export default function CollectionsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {!c.isFullyPaid && (
-                        <button
-                          onClick={() => {
-                            setShowPay(c);
-                            setPayAmount(String(c.outstandingBalance ?? ""));
-                          }}
-                          className="text-sm text-brand-600 font-medium"
-                        >
-                          Record Payment
-                        </button>
-                      )}
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Record Payment",
+                            onClick: () => {
+                              setShowPay(c);
+                              setPayAmount(String(c.outstandingBalance ?? ""));
+                            },
+                            hidden: !!c.isFullyPaid,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

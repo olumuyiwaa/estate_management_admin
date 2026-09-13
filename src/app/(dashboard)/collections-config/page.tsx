@@ -11,6 +11,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import Modal from "@/components/common/Modal";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import Pagination from "@/components/common/Pagination";
+import ActionMenu from "@/components/common/ActionMenu";
 
 type CollectionConfig = {
   id: number;
@@ -314,20 +315,17 @@ export default function CollectionsConfigPage() {
             header: "Actions",
             className: "text-right",
             render: (c) => (
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => openEdit(c)}
-                  className="text-sm font-medium text-brand-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => setDeleteTarget(c)}
-                  className="text-sm font-medium text-red-600"
-                >
-                  Delete
-                </button>
-              </div>
+              <ActionMenu
+                items={[
+                  { label: "Edit", onClick: () => openEdit(c) },
+                  {
+                    label: "Delete",
+                    onClick: () => setDeleteTarget(c),
+                    variant: "danger",
+                    divider: true,
+                  },
+                ]}
+              />
             ),
           },
         ]}

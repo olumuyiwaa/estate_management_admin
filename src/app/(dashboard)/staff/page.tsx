@@ -11,6 +11,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import Modal from "@/components/common/Modal";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import Pagination from "@/components/common/Pagination";
+import ActionMenu from "@/components/common/ActionMenu";
 
 type Dept = { id: number; name?: string; departmentName?: string; code?: string };
 
@@ -333,20 +334,17 @@ export default function StaffPage() {
             header: "Actions",
             className: "text-right",
             render: (s) => (
-              <div className="flex justify-end gap-2 whitespace-nowrap">
-                <button
-                  onClick={() => openEdit(s)}
-                  className="text-sm font-medium text-brand-600 hover:text-brand-700"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => setDeleteTarget(s)}
-                  className="text-sm font-medium text-red-600 hover:text-red-700"
-                >
-                  Delete
-                </button>
-              </div>
+              <ActionMenu
+                items={[
+                  { label: "Edit", onClick: () => openEdit(s) },
+                  {
+                    label: "Delete",
+                    onClick: () => setDeleteTarget(s),
+                    variant: "danger",
+                    divider: true,
+                  },
+                ]}
+              />
             ),
           },
         ]}

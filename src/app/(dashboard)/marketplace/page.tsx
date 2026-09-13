@@ -5,6 +5,7 @@ import api from "@/app/api/axios";
 import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface MarketplaceItem {
   id: number;
@@ -455,23 +456,23 @@ export default function MarketplacePage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">{item.viewCount ?? 0}</td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      {item.approvalStatus !== "Approved" && (
-                        <button
-                          onClick={() => handleApprove(item.id)}
-                          className="text-sm text-green-600 font-medium"
-                        >
-                          Approve
-                        </button>
-                      )}
-                      {item.approvalStatus !== "Rejected" && (
-                        <button
-                          onClick={() => handleReject(item.id)}
-                          className="text-sm text-red-600 font-medium"
-                        >
-                          Reject
-                        </button>
-                      )}
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Approve",
+                            onClick: () => handleApprove(item.id),
+                            variant: "success",
+                            hidden: item.approvalStatus === "Approved",
+                          },
+                          {
+                            label: "Reject",
+                            onClick: () => handleReject(item.id),
+                            variant: "danger",
+                            hidden: item.approvalStatus === "Rejected",
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

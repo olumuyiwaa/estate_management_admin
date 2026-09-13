@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import PageHeader from "@/components/common/PageHeader";
 import Pagination from "@/components/common/Pagination";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface Payment {
   id?: number;
@@ -163,11 +164,19 @@ export default function PaymentsPage() {
                     <td className="px-4 py-3">{p.paymentChannel || "—"}</td>
                     <td className="px-4 py-3 font-mono text-xs">{p.paymentReference || p.receiptNumber || "—"}</td>
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{p.paymentDate ? new Date(p.paymentDate).toLocaleString() : "—"}</td>
-                    <td className="px-4 py-3 text-right space-x-2">
-                      <button onClick={() => setViewItem(p)} className="text-sm text-gray-600">View</button>
-                      {p.id != null && (
-                        <button onClick={() => handleDelete(p.id!)} className="text-sm text-red-600">Delete</button>
-                      )}
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          { label: "View", onClick: () => setViewItem(p) },
+                          {
+                            label: "Delete",
+                            onClick: () => handleDelete(p.id!),
+                            variant: "danger",
+                            divider: true,
+                            hidden: p.id == null,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

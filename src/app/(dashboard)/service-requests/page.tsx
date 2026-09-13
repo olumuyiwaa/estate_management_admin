@@ -6,6 +6,7 @@ import { ServiceRequest, ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 import UpdateModal from "@/components/common/UpdateModal";
 
 export default function ServiceRequestsPage() {
@@ -364,52 +365,43 @@ export default function ServiceRequestsPage() {
                         : "—"}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex flex-wrap justify-end gap-2">
-                        <button
-                          onClick={() => setViewRequest(r)}
-                          className="text-sm text-gray-600 font-medium"
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() => setEditRequest(r)}
-                          className="text-sm text-brand-600 font-medium"
-                        >
-                          Edit
-                        </button>
-                        {r.status?.toLowerCase() !== "resolved" &&
-                          r.status?.toLowerCase() !== "closed" && (
-                            <>
-                              <button
-                                onClick={() => handleAssign(r.id)}
-                                className="text-sm text-purple-600 font-medium"
-                              >
-                                Assign
-                              </button>
-                              <button
-                                onClick={() => handleResolve(r.id)}
-                                className="text-sm text-emerald-600 font-medium"
-                              >
-                                Resolve
-                              </button>
-                              <button
-                                onClick={() => handleClose(r.id)}
-                                className="text-sm text-gray-500 font-medium"
-                              >
-                                Close
-                              </button>
-                            </>
-                          )}
-                        {(r.status?.toLowerCase() === "resolved" ||
-                          r.status?.toLowerCase() === "closed") && (
-                          <button
-                            onClick={() => handleReopen(r.id)}
-                            className="text-sm text-orange-600 font-medium"
-                          >
-                            Reopen
-                          </button>
-                        )}
-                      </div>
+                      <ActionMenu
+                        items={[
+                          { label: "View", onClick: () => setViewRequest(r) },
+                          { label: "Edit", onClick: () => setEditRequest(r) },
+                          {
+                            label: "Assign",
+                            onClick: () => handleAssign(r.id),
+                            hidden:
+                              r.status?.toLowerCase() === "resolved" ||
+                              r.status?.toLowerCase() === "closed",
+                          },
+                          {
+                            label: "Resolve",
+                            onClick: () => handleResolve(r.id),
+                            variant: "success",
+                            hidden:
+                              r.status?.toLowerCase() === "resolved" ||
+                              r.status?.toLowerCase() === "closed",
+                          },
+                          {
+                            label: "Close",
+                            onClick: () => handleClose(r.id),
+                            hidden:
+                              r.status?.toLowerCase() === "resolved" ||
+                              r.status?.toLowerCase() === "closed",
+                          },
+                          {
+                            label: "Reopen",
+                            onClick: () => handleReopen(r.id),
+                            variant: "warning",
+                            hidden: !(
+                              r.status?.toLowerCase() === "resolved" ||
+                              r.status?.toLowerCase() === "closed"
+                            ),
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

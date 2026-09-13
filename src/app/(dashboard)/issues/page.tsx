@@ -6,6 +6,7 @@ import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 import UpdateModal from "@/components/common/UpdateModal";
 
 interface Issue {
@@ -268,33 +269,33 @@ export default function IssuesPage() {
                         ? new Date(issue.reportedDate).toLocaleDateString()
                         : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      {issue.status?.toLowerCase() === "open" && (
-                        <button
-                          onClick={() => handleUpdateStatus(issue, "In Progress")}
-                          className="text-sm text-purple-600 font-medium"
-                        >
-                          Start
-                        </button>
-                      )}
-                      {["open", "in progress"].includes(
-                        (issue.status || "").toLowerCase()
-                      ) && (
-                        <button
-                          onClick={() => handleUpdateStatus(issue, "Resolved")}
-                          className="text-sm text-green-600 font-medium"
-                        >
-                          Resolve
-                        </button>
-                      )}
-                      <button onClick={() => setViewIssue(issue)} className="text-sm text-gray-600 mr-2">View</button>
-                      <button onClick={() => setEditIssue(issue)} className="text-sm text-brand-600 mr-2">Edit</button>
-                      <button
-                        onClick={() => handleDelete(issue.id)}
-                        className="text-sm text-red-600 font-medium"
-                      >
-                        Delete
-                      </button>
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Start",
+                            onClick: () => handleUpdateStatus(issue, "In Progress"),
+                            variant: "warning",
+                            hidden: issue.status?.toLowerCase() !== "open",
+                          },
+                          {
+                            label: "Resolve",
+                            onClick: () => handleUpdateStatus(issue, "Resolved"),
+                            variant: "success",
+                            hidden: !["open", "in progress"].includes(
+                              (issue.status || "").toLowerCase()
+                            ),
+                          },
+                          { label: "View", onClick: () => setViewIssue(issue) },
+                          { label: "Edit", onClick: () => setEditIssue(issue) },
+                          {
+                            label: "Delete",
+                            onClick: () => handleDelete(issue.id),
+                            variant: "danger",
+                            divider: true,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

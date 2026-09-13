@@ -7,6 +7,7 @@ import { extractList, errMsg } from "@/app/api/helpers";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/common/PageHeader";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface MeetingItem {
   id?: number;
@@ -181,12 +182,20 @@ export default function MeetingSummaryPage() {
                     <td className="px-4 py-3 font-medium">{m.title || m.meetingTitle || "—"}</td>
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{m.meetingDate ? new Date(m.meetingDate).toLocaleString() : "—"}</td>
                     <td className="px-4 py-3">{m.location || "—"}</td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      <button onClick={() => setViewItem(m)} className="text-sm text-gray-600">View</button>
-                      <button onClick={() => openEdit(m)} className="text-sm text-brand-600">Edit</button>
-                      {m.id != null && (
-                        <button onClick={() => handleDelete(m.id!)} className="text-sm text-red-600">Delete</button>
-                      )}
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          { label: "View", onClick: () => setViewItem(m) },
+                          { label: "Edit", onClick: () => openEdit(m) },
+                          {
+                            label: "Delete",
+                            onClick: () => handleDelete(m.id!),
+                            variant: "danger",
+                            divider: true,
+                            hidden: m.id == null,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

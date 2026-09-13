@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "@/app/api/axios";
 import { ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
+import ActionMenu from "@/components/common/ActionMenu";
 
 interface Announcement {
   id: number;
@@ -316,19 +317,28 @@ export default function AnnouncementsPage() {
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                       {a.publishedDate ? new Date(a.publishedDate).toLocaleDateString() : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2">
-                      {!a.isPublished ? (
-                        <button onClick={() => handlePublish(a.id)} className="text-sm text-brand-600 font-medium">
-                          Publish
-                        </button>
-                      ) : (
-                        <button onClick={() => handleUnpublish(a.id)} className="text-sm text-orange-600 font-medium">
-                          Unpublish
-                        </button>
-                      )}
-                      <button onClick={() => handleDelete(a.id)} className="text-sm text-red-600 font-medium">
-                        Delete
-                      </button>
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          {
+                            label: "Publish",
+                            onClick: () => handlePublish(a.id),
+                            hidden: !!a.isPublished,
+                          },
+                          {
+                            label: "Unpublish",
+                            onClick: () => handleUnpublish(a.id),
+                            variant: "warning",
+                            hidden: !a.isPublished,
+                          },
+                          {
+                            label: "Delete",
+                            onClick: () => handleDelete(a.id),
+                            variant: "danger",
+                            divider: true,
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))

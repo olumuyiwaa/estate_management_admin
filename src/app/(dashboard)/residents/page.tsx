@@ -6,6 +6,7 @@ import { Resident, ApiResponse, PagedData } from "@/app/api/types";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
+import ActionMenu from "@/components/common/ActionMenu";
 import UpdateModal from "@/components/common/UpdateModal";
 
 export default function ResidentsPage() {
@@ -343,19 +344,13 @@ export default function ResidentsPage() {
                         {r.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      <button
-                        onClick={() => setViewResident(r)}
-                        className="text-sm text-gray-600 dark:text-gray-300 mr-2"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => setEditResident(r)}
-                        className="text-sm text-brand-600 font-medium"
-                      >
-                        Edit
-                      </button>
+                    <td className="px-4 py-3 text-right">
+                      <ActionMenu
+                        items={[
+                          { label: "View", onClick: () => setViewResident(r) },
+                          { label: "Edit", onClick: () => setEditResident(r) },
+                        ]}
+                      />
                     </td>
                   </tr>
                 ))
