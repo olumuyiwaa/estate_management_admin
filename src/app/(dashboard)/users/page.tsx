@@ -124,7 +124,7 @@ export default function UsersPage() {
   const handleDeactivate = async (userName: string) => {
     if (!confirm(`Deactivate ${userName}?`)) return;
     try {
-      await api.post("/api/Access/DeactivateUser", { userName });
+      await api.post("/api/Access/DeactivateUser", null, { params: { username: userName } });
       toast.success("User deactivated");
       fetchUsers();
     } catch (err: any) {
@@ -134,7 +134,7 @@ export default function UsersPage() {
 
   const handleReActivate = async (userName: string) => {
     try {
-      await api.post("/api/Access/ReActivateUser", { userName });
+      await api.post("/api/Access/ReActivateUser", null, { params: { username: userName } });
       toast.success("User reactivated");
       fetchUsers();
     } catch (err: any) {

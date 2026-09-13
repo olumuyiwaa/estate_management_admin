@@ -46,6 +46,9 @@ NEXT_PUBLIC_APP_VERSION=1.0.0
 | **Announcements** | Create, publish, unpublish, delete |
 | **Issues** | Report, start, resolve, delete |
 | **Marketplace** | Listings, approve/reject, create listing, summary |
+| **Payments** | Payment history search (ref/receipt/channel/collection), summary, delete |
+| **Notifications** | Send push, unread list, mark read, clear all |
+| **Meeting Summaries** | Full CRUD (uses API typos as-is) |
 | **Profile** | Account card, change password, sign out |
 
 ---

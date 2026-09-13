@@ -20,10 +20,13 @@ const navItems: NavItem[] = [
   { name: "Vehicle Access", path: "/vehicles", icon: "🚗" },
   { name: "Service Requests", path: "/service-requests", icon: "🛠️" },
   { name: "Collections", path: "/collections", icon: "💰" },
+  { name: "Payments", path: "/payments", icon: "🧾" },
   { name: "Collection Types", path: "/collections-config", icon: "📋" },
   { name: "Announcements", path: "/announcements", icon: "📢" },
   { name: "Issues", path: "/issues", icon: "⚠️" },
   { name: "Marketplace", path: "/marketplace", icon: "🛒" },
+  { name: "Notifications", path: "/notifications", icon: "🔔" },
+  { name: "Meeting Summaries", path: "/meeting-summary", icon: "📝" },
 ];
 
 const accountItems: NavItem[] = [
@@ -43,11 +46,9 @@ export default function AppSidebar() {
   const isActive = (path: string) =>
     pathname === path || pathname.startsWith(path + "/");
 
-  // Desktop: expand or hover shows labels. Mobile: always show when open.
   const showLabels = isExpanded || isHovered || isMobileOpen;
   const widthClass = showLabels ? "w-[260px]" : "w-[80px]";
 
-  // Close mobile drawer on route change
   useEffect(() => {
     if (isMobileOpen) toggleMobileSidebar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +76,6 @@ export default function AppSidebar() {
 
   return (
     <>
-      {/* Mobile backdrop */}
       {isMobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
@@ -106,7 +106,6 @@ export default function AppSidebar() {
                 </div>
               )}
             </Link>
-            {/* Close on mobile */}
             <button
               type="button"
               onClick={toggleMobileSidebar}
