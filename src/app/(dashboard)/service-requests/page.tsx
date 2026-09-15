@@ -16,13 +16,14 @@ export default function ServiceRequestsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 20;
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<"open" | "all">("open");
+  const [filter, setFilter] = useState<"open" | "critical" | "all">("open");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     subject: "",
     description: "",
     categoryId: 1,
     priority: "medium",
+    residentId: 0,
   });
   const [saving, setSaving] = useState(false);
   const [viewRequest, setViewRequest] = useState<any | null>(null);
@@ -31,13 +32,13 @@ export default function ServiceRequestsPage() {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const endpoint =
-        filter === "open"
-          ? "/api/ServiceRequests/GetOpenServiceRequests"
-          : "/api/ServiceRequests/SearchServiceRequests";
-
+      const endpoints: Record<string, string> = {
+        open: "/api/ServiceRequests/GetOpenServiceRequests",
+        critical: "/api/ServiceRequests/GetCriticalServiceRequests",
+        all: "/api/ServiceRequests/SearchServiceRequests",
+      };
       const { data } = await api.get<ApiResponse<PagedData<ServiceRequest>>>(
-        endpoint
+        endpoints[filter]
       );
       const page = data?.data;
       setRequests(page?.items ?? []);
@@ -62,7 +63,10 @@ export default function ServiceRequestsPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/api/ServiceRequests/CreateServiceRequest", form);
+      await api.post("/api/ServiceRequests/CreateServiceRequest", {
+        ...form,
+        residentId: form.residentId || undefined,
+      });
       toast.success("Service request created");
       setShowForm(false);
       setForm({
@@ -70,6 +74,7 @@ export default function ServiceRequestsPage() {
         description: "",
         categoryId: 1,
         priority: "medium",
+        residentId: 0,
       });
       fetchRequests();
     } catch (err: any) {
@@ -134,6 +139,31 @@ export default function ServiceRequestsPage() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    if (typeof window !== "undefined" && !window.confirm("Delete this service request?"))
+      return;
+    try {
+      await api.delete("/api/ServiceRequests/DeleteServiceRequest", {
+        params: { id },
+      });
+      toast.success("Request deleted");
+      fetchRequests();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Delete failed");
+    }
+  };
+
+  const handleViewDetail = async (r: ServiceRequest) => {
+    try {
+      const { data } = await api.get("/api/ServiceRequests/GetServiceRequestById", {
+        params: { id: r.id },
+      });
+      setViewRequest(data?.data ?? data ?? r);
+    } catch {
+      setViewRequest(r);
+    }
+  };
+
   const priorityColor = (p?: string) => {
     switch (p?.toLowerCase()) {
       case "critical":
@@ -181,17 +211,17 @@ export default function ServiceRequestsPage() {
       </div>
 
       <div className="flex gap-2">
-        {(["open", "all"] as const).map((f) => (
+        {(["open", "critical", "all"] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 text-sm font-medium rounded-lg ${
+            className={`px-4 py-1.5 text-sm font-medium rounded-lg capitalize ${
               filter === f
                 ? "bg-brand-500 text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
             }`}
           >
-            {f === "open" ? "Open" : "All"}
+            {f}
           </button>
         ))}
       </div>
@@ -221,6 +251,24 @@ export default function ServiceRequestsPage() {
                     setForm({ ...form, description: e.target.value })
                   }
                   className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Resident ID
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={form.residentId || ""}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      residentId: parseInt(e.target.value) || 0,
+                    })
+                  }
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                  placeholder="Optional"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -367,7 +415,7 @@ export default function ServiceRequestsPage() {
                     <td className="px-4 py-3 text-right">
                       <ActionMenu
                         items={[
-                          { label: "View", onClick: () => setViewRequest(r) },
+                          { label: "View", onClick: () => handleViewDetail(r) },
                           { label: "Edit", onClick: () => setEditRequest(r) },
                           {
                             label: "Assign",
@@ -400,6 +448,11 @@ export default function ServiceRequestsPage() {
                               r.status?.toLowerCase() === "closed"
                             ),
                           },
+                          {
+                            label: "Delete",
+                            onClick: () => handleDelete(r.id),
+                            variant: "danger",
+                          },
                         ]}
                       />
                     </td>
@@ -426,7 +479,10 @@ export default function ServiceRequestsPage() {
             onClose={() => setEditRequest(null)}
             onSave={async (upd) => {
               try {
-                await api.put("/api/ServiceRequests/Update", upd);
+                // Correct path: UpdateServiceRequest (id as query param)
+                await api.put("/api/ServiceRequests/UpdateServiceRequest", upd, {
+                  params: { id: upd.id ?? editRequest?.id },
+                });
                 toast.success("Request updated");
                 fetchRequests();
               } catch (err: any) {

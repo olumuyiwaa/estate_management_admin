@@ -39,7 +39,7 @@ export default function CollectionsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 20;
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"all" | "outstanding" | "overdue" | "paid">("outstanding");
+  const [tab, setTab] = useState<"all" | "outstanding" | "overdue" | "partial" | "paid">("outstanding");
   const [showPay, setShowPay] = useState<Collection | null>(null);
   const [payAmount, setPayAmount] = useState("");
   const [payChannel, setPayChannel] = useState("Cash");
@@ -52,6 +52,7 @@ export default function CollectionsPage() {
         all: "/api/Collections/SearchCollections",
         outstanding: "/api/Collections/GetOutstandingCollections",
         overdue: "/api/Collections/GetOverdueCollections",
+        partial: "/api/Collections/GetPartiallyPaidCollections",
         paid: "/api/Collections/GetPaidCollections",
       };
       const { data } = await api.get<ApiResponse<PagedData<Collection>>>(
@@ -129,7 +130,7 @@ export default function CollectionsPage() {
       </div>
 
       <div className="flex gap-2 border-b border-gray-200 dark:border-gray-700">
-        {(["outstanding", "overdue", "paid", "all"] as const).map((t) => (
+        {(["outstanding", "overdue", "partial", "paid", "all"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -139,7 +140,7 @@ export default function CollectionsPage() {
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            {t}
+            {t === "partial" ? "Partially paid" : t}
           </button>
         ))}
       </div>

@@ -61,11 +61,14 @@ export default function MarketplacePage() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const pageSize = 20;
-  const [tab, setTab] = useState<"all" | "pending" | "approved">("all");
+  const [tab, setTab] = useState<"all" | "pending" | "approved" | "rejected" | "featured">("all");
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [imagesFor, setImagesFor] = useState<MarketplaceItem | null>(null);
+  const [images, setImages] = useState<any[]>([]);
+  const [imageUrl, setImageUrl] = useState("");
   const [form, setForm] = useState({
-    residentId: 16,
+    residentId: 0,
     categoryId: 1,
     itemTitle: "",
     itemDescription: "",
@@ -86,6 +89,8 @@ export default function MarketplacePage() {
         all: "/api/MarketplaceItems/SearchMarketplaceItems",
         pending: "/api/MarketplaceItems/GetMarketplaceItemsPendingApproval",
         approved: "/api/MarketplaceItems/GetApprovedMarketplaceItems",
+        rejected: "/api/MarketplaceItems/GetRejectedMarketplaceItems",
+        featured: "/api/MarketplaceItems/GetFeaturedMarketplaceItems",
       };
       const { data } = await api.get<ApiResponse<PagedData<MarketplaceItem>>>(
         endpoints[tab]
@@ -133,7 +138,7 @@ export default function MarketplacePage() {
       toast.success("Listing created");
       setShowForm(false);
       setForm({
-        residentId: 16,
+        residentId: 0,
         categoryId: 1,
         itemTitle: "",
         itemDescription: "",
@@ -152,6 +157,68 @@ export default function MarketplacePage() {
       toast.error(err?.response?.data?.message || "Failed to create listing");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const openImages = async (item: MarketplaceItem) => {
+    setImagesFor(item);
+    setImageUrl("");
+    try {
+      const { data } = await api.get(
+        "/api/MarketplaceItemImages/GetImagesByMarketplaceItem",
+        { params: { marketplaceItemId: item.id } }
+      );
+      const list = data?.data?.items ?? data?.data ?? (Array.isArray(data) ? data : []);
+      setImages(Array.isArray(list) ? list : []);
+    } catch {
+      setImages([]);
+    }
+  };
+
+  const handleAddImage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!imagesFor || !imageUrl.trim()) return;
+    setSaving(true);
+    try {
+      await api.post("/api/MarketplaceItemImages/CreateMarketplaceItemImage", {
+        marketplaceItemId: imagesFor.id,
+        imageUrl: imageUrl.trim(),
+        displayOrder: images.length,
+        isPrimary: images.length === 0,
+      });
+      toast.success("Image added");
+      setImageUrl("");
+      openImages(imagesFor);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to add image");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSetPrimary = async (imageId: number) => {
+    if (!imagesFor) return;
+    try {
+      await api.post("/api/MarketplaceItemImages/SetPrimaryMarketplaceItemImage", null, {
+        params: { id: imageId },
+      });
+      toast.success("Primary image set");
+      openImages(imagesFor);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to set primary");
+    }
+  };
+
+  const handleDeleteImage = async (imageId: number) => {
+    if (!imagesFor || !confirm("Delete this image?")) return;
+    try {
+      await api.delete("/api/MarketplaceItemImages/DeleteMarketplaceItemImage", {
+        params: { id: imageId },
+      });
+      toast.success("Image deleted");
+      openImages(imagesFor);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Delete failed");
     }
   };
 
@@ -226,7 +293,7 @@ export default function MarketplacePage() {
       )}
 
       <div className="flex gap-2 border-b border-gray-200 dark:border-gray-700">
-        {(["all", "pending", "approved"] as const).map((t) => (
+        {(["all", "pending", "approved", "rejected", "featured"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -460,6 +527,10 @@ export default function MarketplacePage() {
                       <ActionMenu
                         items={[
                           {
+                            label: "Images",
+                            onClick: () => openImages(item),
+                          },
+                          {
                             label: "Approve",
                             onClick: () => handleApprove(item.id),
                             variant: "success",
@@ -487,6 +558,85 @@ export default function MarketplacePage() {
           onPageChange={setPage}
         />
       </div>
+
+      {imagesFor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-1">Images</h2>
+            <p className="text-sm text-gray-500 mb-4 truncate">
+              {imagesFor.itemTitle} (#{imagesFor.id})
+            </p>
+            <form onSubmit={handleAddImage} className="flex gap-2 mb-4">
+              <input
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="Image URL"
+                className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+              />
+              <button
+                type="submit"
+                disabled={saving || !imageUrl.trim()}
+                className="px-3 py-2 bg-brand-500 text-white text-sm rounded-lg disabled:opacity-60"
+              >
+                Add
+              </button>
+            </form>
+            <ul className="space-y-2 mb-4">
+              {images.length === 0 ? (
+                <li className="text-sm text-gray-500">No images yet</li>
+              ) : (
+                images.map((img: any) => (
+                  <li
+                    key={img.id}
+                    className="flex items-center gap-3 p-2 rounded-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.imageUrl}
+                      alt=""
+                      className="w-12 h-12 object-cover rounded"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs truncate font-mono">{img.imageUrl}</p>
+                      {img.isPrimary && (
+                        <span className="text-xs text-brand-600 font-medium">Primary</span>
+                      )}
+                    </div>
+                    <div className="flex gap-1">
+                      {!img.isPrimary && (
+                        <button
+                          type="button"
+                          onClick={() => handleSetPrimary(img.id)}
+                          className="text-xs px-2 py-1 border rounded"
+                        >
+                          Primary
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteImage(img.id)}
+                        className="text-xs px-2 py-1 border border-red-300 text-red-600 rounded"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))
+              )}
+            </ul>
+            <button
+              type="button"
+              onClick={() => setImagesFor(null)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

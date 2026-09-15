@@ -33,6 +33,16 @@ export default function PaymentsPage() {
   const [lookup, setLookup] = useState({ type: "search", value: "" });
   const [viewItem, setViewItem] = useState<Payment | null>(null);
   const [summary, setSummary] = useState<Record<string, any> | null>(null);
+  const [showBulk, setShowBulk] = useState(false);
+  const [bulkSaving, setBulkSaving] = useState(false);
+  const [bulkForm, setBulkForm] = useState({
+    paymentChannel: "Cash",
+    paymentReference: "",
+    receiptNumber: "",
+    totalAmountPaid: "",
+    notes: "",
+    itemsText: "", // "collectionId,amount" per line
+  });
 
   const fetchList = async () => {
     setLoading(true);
@@ -94,12 +104,75 @@ export default function PaymentsPage() {
     }
   };
 
+  const handleBulk = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBulkSaving(true);
+    try {
+      const items = bulkForm.itemsText
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [collectionId, amountPaid] = line.split(/[,\s]+/);
+          return {
+            collectionId: Number(collectionId),
+            amountPaid: Number(amountPaid),
+          };
+        })
+        .filter((i) => i.collectionId && !Number.isNaN(i.amountPaid));
+
+      if (!items.length) {
+        toast.error("Add at least one line: collectionId,amount");
+        setBulkSaving(false);
+        return;
+      }
+
+      const total =
+        parseFloat(bulkForm.totalAmountPaid) ||
+        items.reduce((s, i) => s + i.amountPaid, 0);
+
+      await api.post(API.collectionPayments.bulk, {
+        paymentChannel: bulkForm.paymentChannel,
+        paymentReference: bulkForm.paymentReference || null,
+        receiptNumber: bulkForm.receiptNumber || null,
+        totalAmountPaid: total,
+        notes: bulkForm.notes || "Bulk payment via admin portal",
+        items,
+      });
+      toast.success("Bulk payment submitted");
+      setShowBulk(false);
+      setBulkForm({
+        paymentChannel: "Cash",
+        paymentReference: "",
+        receiptNumber: "",
+        totalAmountPaid: "",
+        notes: "",
+        itemsText: "",
+      });
+      fetchList();
+      fetchSummary();
+    } catch (err: any) {
+      toast.error(errMsg(err, "Bulk payment failed"));
+    } finally {
+      setBulkSaving(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Collection Payments"
-        description="Search payment history by reference, receipt, channel, or collection"
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <PageHeader
+          title="Collection Payments"
+          description="Search payment history by reference, receipt, channel, or collection"
+        />
+        <button
+          type="button"
+          onClick={() => setShowBulk(true)}
+          className="inline-flex items-center px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium rounded-lg shrink-0"
+        >
+          + Bulk payment
+        </button>
+      </div>
 
       {summary && typeof summary === "object" && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -189,6 +262,105 @@ export default function PaymentsPage() {
 
       {viewItem && (
         <ViewDetailsModal title="Payment details" data={viewItem} onClose={() => setViewItem(null)} />
+      )}
+
+      {showBulk && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-4">Bulk payment for resident</h2>
+            <form onSubmit={handleBulk} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Channel</label>
+                  <select
+                    value={bulkForm.paymentChannel}
+                    onChange={(e) =>
+                      setBulkForm({ ...bulkForm, paymentChannel: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                  >
+                    <option value="Cash">Cash</option>
+                    <option value="Transfer">Transfer</option>
+                    <option value="Card">Card</option>
+                    <option value="POS">POS</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Total amount</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={bulkForm.totalAmountPaid}
+                    onChange={(e) =>
+                      setBulkForm({ ...bulkForm, totalAmountPaid: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                    placeholder="Auto from lines if empty"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Payment reference</label>
+                <input
+                  value={bulkForm.paymentReference}
+                  onChange={(e) =>
+                    setBulkForm({ ...bulkForm, paymentReference: e.target.value })
+                  }
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Receipt number</label>
+                <input
+                  value={bulkForm.receiptNumber}
+                  onChange={(e) =>
+                    setBulkForm({ ...bulkForm, receiptNumber: e.target.value })
+                  }
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Items (one per line: collectionId,amount)
+                </label>
+                <textarea
+                  required
+                  rows={5}
+                  value={bulkForm.itemsText}
+                  onChange={(e) =>
+                    setBulkForm({ ...bulkForm, itemsText: e.target.value })
+                  }
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm font-mono"
+                  placeholder={"12,5000\n15,2500"}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Notes</label>
+                <input
+                  value={bulkForm.notes}
+                  onChange={(e) => setBulkForm({ ...bulkForm, notes: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowBulk(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={bulkSaving}
+                  className="flex-1 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm disabled:opacity-60"
+                >
+                  {bulkSaving ? "Submitting…" : "Submit bulk"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );
