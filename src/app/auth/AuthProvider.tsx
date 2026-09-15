@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./AuthContext";
 import { AuthContextType, LoginPayload, AuthUser } from "../api/types";
 import { authApi } from "../api/auth.api";
+import { hasPermission as checkPermission } from "../api/permissions";
 
 export default function AuthProvider({
   children,
@@ -55,12 +56,19 @@ export default function AuthProvider({
     }
   }, []);
 
+  const hasPermission = useCallback(
+    (moduleKey: string, action: "read" | "add" | "edit" | "delete" = "read") =>
+      checkPermission(user, moduleKey, action),
+    [user]
+  );
+
   const value: AuthContextType = {
     user,
     isLoading,
     isAuthenticated: !!user && hasToken,
     login,
     logout,
+    hasPermission,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

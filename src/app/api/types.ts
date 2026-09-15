@@ -36,6 +36,11 @@ export interface AuthContextType {
   isLoading: boolean;
   login: (payload: LoginPayload) => Promise<void>;
   logout: () => Promise<void>;
+  /** Check JWT module permission (Admin always true; empty claims → true) */
+  hasPermission: (
+    moduleKey: string,
+    action?: "read" | "add" | "edit" | "delete"
+  ) => boolean;
 }
 
 export function getUserRole(user: AuthUser | null | undefined): string {

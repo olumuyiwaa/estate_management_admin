@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2cbba40-f738-47ff-8828-e0939412018a" name="Changes" comment="users,visitors and market categories">
+    <list default="true" id="c2cbba40-f738-47ff-8828-e0939412018a" name="Changes" comment="collections, marketplace, payments, service requests, vehicle">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/marketplace-categories/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/marketplace-categories/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/visitors/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/visitors/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/announcements/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/announcements/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/issues/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/issues/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(dashboard)/notifications/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(dashboard)/notifications/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/AuthProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/AuthProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/AppSidebar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +109,7 @@
       <updated>1789230394131</updated>
       <workItem from="1789230395995" duration="803000" />
       <workItem from="1789250533112" duration="3273000" />
-      <workItem from="1789389828280" duration="1047000" />
+      <workItem from="1789389828280" duration="2501000" />
     </task>
     <task id="LOCAL-00001" summary="meeting summary&#10;notifications&#10;payments">
       <option name="closed" value="true" />
@@ -131,7 +135,23 @@
       <option name="project" value="LOCAL" />
       <updated>1789464957543</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="users,visitors and market categories">
+      <option name="closed" value="true" />
+      <created>1789465358497</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1789465358497</updated>
+    </task>
+    <task id="LOCAL-00005" summary="collections, marketplace, payments, service requests, vehicle">
+      <option name="closed" value="true" />
+      <created>1789466255112</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1789466255113</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +172,7 @@
     <MESSAGE value="meeting summary&#10;notifications&#10;payments" />
     <MESSAGE value="action button and general improvements" />
     <MESSAGE value="users,visitors and market categories" />
-    <option name="LAST_COMMIT_MESSAGE" value="users,visitors and market categories" />
+    <MESSAGE value="collections, marketplace, payments, service requests, vehicle" />
+    <option name="LAST_COMMIT_MESSAGE" value="collections, marketplace, payments, service requests, vehicle" />
   </component>
 </project>

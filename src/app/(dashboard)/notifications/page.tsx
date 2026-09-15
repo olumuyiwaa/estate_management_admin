@@ -24,6 +24,7 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [showSend, setShowSend] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [viewItem, setViewItem] = useState<NotificationItem | null>(null);
   const [form, setForm] = useState({
     title: "",
     message: "",
@@ -82,6 +83,31 @@ export default function NotificationsPage() {
       fetchUnread();
     } catch (err: any) {
       toast.error(errMsg(err, "Failed to mark as read"));
+    }
+  };
+
+  const markUnread = async (id: number | string) => {
+    try {
+      await api.put(API.pushNotifications.markUnread, null, { params: { id } });
+      toast.success("Marked as unread");
+      fetchUnread();
+    } catch (err: any) {
+      toast.error(errMsg(err, "Failed to mark as unread"));
+    }
+  };
+
+  const openDetail = async (n: NotificationItem) => {
+    if (n.id == null) {
+      setViewItem(n);
+      return;
+    }
+    try {
+      const { data } = await api.get(API.pushNotifications.getSingle, {
+        params: { id: n.id },
+      });
+      setViewItem(data?.data ?? data ?? n);
+    } catch {
+      setViewItem(n);
     }
   };
 
@@ -241,8 +267,17 @@ export default function NotificationsPage() {
                       <ActionMenu
                         items={[
                           {
+                            label: "View",
+                            onClick: () => openDetail(n),
+                          },
+                          {
                             label: "Mark read",
                             onClick: () => markRead(n.id!),
+                            hidden: n.id == null,
+                          },
+                          {
+                            label: "Mark unread",
+                            onClick: () => markUnread(n.id!),
                             hidden: n.id == null,
                           },
                         ]}
@@ -255,6 +290,55 @@ export default function NotificationsPage() {
           </table>
         </div>
       </div>
+
+      {viewItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold mb-2">{viewItem.title || "Notification"}</h2>
+            <p className="text-sm text-gray-500 mb-3">
+              {viewItem.createdAt || viewItem.sentAt
+                ? new Date(String(viewItem.createdAt || viewItem.sentAt)).toLocaleString()
+                : ""}
+            </p>
+            <p className="text-sm whitespace-pre-wrap text-gray-800 dark:text-gray-200 mb-4">
+              {viewItem.message || viewItem.body || "—"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {viewItem.id != null && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      markRead(viewItem.id!);
+                      setViewItem(null);
+                    }}
+                    className="px-3 py-1.5 text-sm bg-brand-500 text-white rounded-lg"
+                  >
+                    Mark read
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      markUnread(viewItem.id!);
+                      setViewItem(null);
+                    }}
+                    className="px-3 py-1.5 text-sm border rounded-lg"
+                  >
+                    Mark unread
+                  </button>
+                </>
+              )}
+              <button
+                type="button"
+                onClick={() => setViewItem(null)}
+                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg ml-auto"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

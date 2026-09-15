@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import api from "@/app/api/axios";
-import { ApiResponse, PagedData } from "@/app/api/types";
+import { API } from "@/app/api/endpoints";
+import { extractPaged, errMsg } from "@/app/api/helpers";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination";
 import ViewDetailsModal from "@/components/common/ViewDetailsModal";
@@ -39,7 +40,7 @@ export default function IssuesPage() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    reportedBy: 16,
+    reportedBy: 0,
     status: "Open",
   });
   const [viewIssue, setViewIssue] = useState<Issue | null>(null);
@@ -48,15 +49,14 @@ export default function IssuesPage() {
   const fetchList = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get<ApiResponse<PagedData<Issue>>>(
-        "/api/Issues/GetByCritera"
-      );
-      const page = data?.data;
-      setItems(page?.items ?? []);
-      setTotal(page?.totalRecords ?? page?.items?.length ?? 0);
-      setTotalPages(page?.totalPages || Math.max(1, Math.ceil((page?.totalRecords || 0) / pageSize)));
+      // Typo on backend: GetByCritera
+      const { data } = await api.get(API.issues.getByCriteria);
+      const page = extractPaged<Issue>(data, pageSize);
+      setItems(page.items);
+      setTotal(page.totalRecords);
+      setTotalPages(page.totalPages);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to load issues");
+      toast.error(errMsg(err, "Failed to load issues"));
       setItems([]);
     } finally {
       setLoading(false);
@@ -71,18 +71,18 @@ export default function IssuesPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/api/Issues/CreateNew", {
+      await api.post(API.issues.create, {
         title: form.title,
         description: form.description,
-        reportedBy: Number(form.reportedBy),
+        reportedBy: Number(form.reportedBy) || null,
         status: form.status,
       });
       toast.success("Issue created");
       setShowForm(false);
-      setForm({ title: "", description: "", reportedBy: 16, status: "Open" });
+      setForm({ title: "", description: "", reportedBy: 0, status: "Open" });
       fetchList();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to create issue");
+      toast.error(errMsg(err, "Failed to create issue"));
     } finally {
       setSaving(false);
     }
@@ -94,7 +94,7 @@ export default function IssuesPage() {
       if (!ok) return;
     }
     try {
-      await api.put("/api/Issues/Update", {
+      await api.put(API.issues.update, {
         id: issue.id,
         rowVersion: issue.rowVersion || null,
         title: issue.title,
@@ -109,18 +109,18 @@ export default function IssuesPage() {
       toast.success(`Marked as ${status}`);
       fetchList();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Update failed");
+      toast.error(errMsg(err, "Update failed"));
     }
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this issue?")) return;
     try {
-      await api.delete("/api/Issues/Delete", { params: { id } });
+      await api.delete(API.issues.delete, { params: { id } });
       toast.success("Deleted");
       fetchList();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Delete failed");
+      toast.error(errMsg(err, "Delete failed"));
     }
   };
 
@@ -320,7 +320,7 @@ export default function IssuesPage() {
               onClose={() => setEditIssue(null)}
               onSave={async (upd) => {
                 try {
-                  await api.put("/api/Issues/Update", upd);
+                  await api.put(API.issues.update, upd);
                   toast.success("Issue updated");
                   fetchList();
                 } catch (err: any) {

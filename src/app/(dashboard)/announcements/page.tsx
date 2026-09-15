@@ -31,7 +31,9 @@ export default function AnnouncementsPage() {
   const [items, setItems] = useState<Announcement[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"published" | "draft" | "all">("published");
+  const [tab, setTab] = useState<
+    "published" | "draft" | "critical" | "ack" | "all"
+  >("published");
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -46,14 +48,20 @@ export default function AnnouncementsPage() {
   const fetchList = async () => {
     setLoading(true);
     try {
-      let endpoint = "/api/Announcements/SearchAnnouncements";
-      if (tab === "published") endpoint = "/api/Announcements/GetPublishedAnnouncements";
-      if (tab === "draft") endpoint = "/api/Announcements/GetDraftAnnouncements";
+      const endpoints: Record<string, string> = {
+        all: "/api/Announcements/SearchAnnouncements",
+        published: "/api/Announcements/GetPublishedAnnouncements",
+        draft: "/api/Announcements/GetDraftAnnouncements",
+        critical: "/api/Announcements/GetCriticalAnnouncements",
+        ack: "/api/Announcements/AnnRequiringAcknowledgement",
+      };
+      const endpoint = endpoints[tab] || endpoints.all;
 
       const { data } = await api.get<ApiResponse<PagedData<Announcement>>>(endpoint);
       const page = data?.data;
-      setItems(page?.items ?? []);
-      setTotal(page?.totalRecords ?? page?.items?.length ?? 0);
+      const list = page?.items ?? (Array.isArray(data?.data) ? (data.data as any) : []);
+      setItems(Array.isArray(list) ? list : []);
+      setTotal(page?.totalRecords ?? (Array.isArray(list) ? list.length : 0));
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to load announcements");
       setItems([]);
@@ -159,18 +167,26 @@ export default function AnnouncementsPage() {
         </button>
       </div>
 
-      <div className="flex gap-2 border-b border-gray-200 dark:border-gray-700">
-        {(["published", "draft", "all"] as const).map((t) => (
+      <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700">
+        {(
+          [
+            ["published", "Published"],
+            ["draft", "Draft"],
+            ["critical", "Critical"],
+            ["ack", "Needs acknowledgement"],
+            ["all", "All"],
+          ] as const
+        ).map(([key, label]) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px capitalize ${
-              tab === t
+            key={key}
+            onClick={() => setTab(key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px ${
+              tab === key
                 ? "border-brand-500 text-brand-600"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            {t}
+            {label}
           </button>
         ))}
       </div>

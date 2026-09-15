@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
+import { useAuth } from "../app/auth/useAuth";
+import { canAccessPath } from "../app/api/permissions";
 
 type NavItem = {
   name: string;
@@ -35,6 +37,11 @@ const accountItems: NavItem[] = [
 ];
 
 export default function AppSidebar() {
+  const { user } = useAuth();
+  const visibleNav = useMemo(
+    () => navItems.filter((item) => canAccessPath(user, item.path)),
+    [user]
+  );
   const {
     isExpanded,
     isMobileOpen,
@@ -124,7 +131,7 @@ export default function AppSidebar() {
                   Menu
                 </p>
               )}
-              {renderItems(navItems)}
+              {renderItems(visibleNav)}
             </div>
             <div>
               {showLabels && (
