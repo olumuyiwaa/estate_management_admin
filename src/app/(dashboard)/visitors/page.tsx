@@ -70,7 +70,7 @@ export default function VisitorsPage() {
   const fetchVisitors = async () => {
     setLoading(true);
     try {
-      let endpoint = API.visitors.getByCriteria;
+      let endpoint : string  = API.visitors.getByCriteria;
       if (tab === "active") endpoint = API.visitors.active;
       if (tab === "pending") endpoint = API.visitors.pending;
 

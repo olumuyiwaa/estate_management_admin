@@ -38,7 +38,7 @@ export default function MarketplaceCategoriesPage() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      let endpoint = API.marketplaceCategories.active;
+      let endpoint: string = API.marketplaceCategories.active;
       if (tab === "inactive") endpoint = API.marketplaceCategories.inactive;
       if (tab === "all") endpoint = API.marketplaceCategories.search;
 
