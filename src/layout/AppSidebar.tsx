@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
   { name: "Announcements", path: "/announcements", icon: "📢" },
   { name: "Issues", path: "/issues", icon: "⚠️" },
   { name: "Marketplace", path: "/marketplace", icon: "🛒" },
+  { name: "MP Categories", path: "/marketplace-categories", icon: "🏷️" },
   { name: "Notifications", path: "/notifications", icon: "🔔" },
   { name: "Meeting Summaries", path: "/meeting-summary", icon: "📝" },
 ];
